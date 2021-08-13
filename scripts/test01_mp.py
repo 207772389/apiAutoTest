@@ -9,6 +9,8 @@
 """
 import api
 from api.api_mp import ApiMp
+import tools
+from tools.tool import Tool
 
 
 class TestMp:
@@ -21,11 +23,19 @@ class TestMp:
         rep = self.mp.api_mp_login(mobile,pwd)
         print("登录的返回结果为：",rep.json())
         #提取返回的token
-        token = rep.json().get("data").get("token")
+        # token = rep.json().get("data").get("token")
         #把token添加到headers中
-        api.headers['Authorization'] = "Bearer "+token
-        assert 201 == rep.status_code
-        assert "OK" == rep.json().get("message")
+        # api.headers['Authorization'] = "Bearer "+token
+        # assert 201 == rep.status_code
+        # assert "OK" == rep.json().get("message")
+        try:
+            Tool.common_token(rep)
+            Tool.common_assert(rep)
+        except Exception as e:
+            #日志
+            #日志就直接从ui自动化项目中的工具类中拷贝即可
+            #抛异常
+            raise
 
     #测试发布文章接口
     def test02_mp_article(self):
